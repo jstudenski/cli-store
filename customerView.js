@@ -14,14 +14,14 @@ connection.connect(function(err) {
   if (err) throw err;
 
 
-  displayItems();
+  displayItems()//.then();
 
 
 });
 
 var items = [];
 
-function displayItems() {
+var displayItems = function(){
   clear();
   // create table
   var table = new Table({
@@ -47,7 +47,8 @@ function displayItems() {
 
     console.log(table.toString());
     //call;
-    customerPrompt();
+    resolve();
+    //customerPrompt();
   });
 
 }
