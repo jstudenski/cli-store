@@ -13,9 +13,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-
   displayItems();
-
 });
 
 var items = [];
@@ -32,7 +30,6 @@ var displayItems = function() {
   console.log(gray("│       "+logo1("|__|  |___|_,_|___")+logo2("|_|_|_|__,|_| |_|  ")+"      │"));
 
 
-  //clear();
   // create table
   var table = new Table({
       head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
