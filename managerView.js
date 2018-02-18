@@ -2,6 +2,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require('cli-table');
 var clc = require('cli-color');
+var clear = require('clear');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -24,7 +25,8 @@ function managerPrompt() {
         "View Products for Sale",
         "View Low Inventory",
         "Add to Inventory",
-        "Add New Product"
+        "Add New Product",
+        "Remove Product"
       ],
       name: "choice",
     }
@@ -42,6 +44,9 @@ function managerPrompt() {
       case "Add New Product":
         newProduct();
         break;
+      case "Remove Product":
+        removeProduct();
+        break;
       default:
         console.log("Option Not Defined");
   }
@@ -53,11 +58,11 @@ function managerPrompt() {
 
 
 function viewProducts(){
-  console.log("1");
-
+  displayItems();
 }
 
 function lowInventory(){
+  clear();
   //console.log("2");
   var table = new Table({
     head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
@@ -79,14 +84,45 @@ function lowInventory(){
     //   "value":item_id
     // }
     // items.push(storeItem);
+
   }
 
-  console.log(table.toString()); 
+    console.log(table.toString()); 
+    managerPrompt();
   });
 }
 
-function addInventory(){
 
+
+function addInventory(){
+  console.log("3");
+
+}  
+
+function removeProduct(){
+  inquirer.prompt([
+      {
+      type: "text",
+      message: "Remove item number:",
+      name: "item"
+    }
+  ]).then(function(res) {
+  
+    connection.query(
+      "DELETE FROM products WHERE ?",
+      {
+        item_id: res.item
+      },
+      function(err, res) {
+        console.log(res.affectedRows + " products deleted!\n");
+        // Call readProducts AFTER the DELETE completes
+        managerPrompt();
+      }
+    );
+  });
+}
+
+function newProduct(){
   inquirer.prompt([
     {
       type: "text",
@@ -118,22 +154,13 @@ function addInventory(){
   ]).then(function(res) {
 
     connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('"+res.name+"', '"+res.dept+"', '"+res.price+"', '"+res.qty+"')", function(err, res) {
-      console.log(res.affectedRows + " product added!\n");
+      managerPrompt();
+      //console.log(res.affectedRows + " product added!\n");
     }); 
 
   });
 
-
-
 }
-
-function newProduct(){
-  console.log("4");
-
-}  
-
-
-
 
 
 function color(department, text) {
@@ -160,3 +187,52 @@ function color(department, text) {
   return msg(text);
 
 }
+
+var displayItems = function() {
+  clear();
+
+  var gray = clc.xterm(8);
+  var logo1 = clc.xterm(226);
+  var logo2 = clc.xterm(27);
+  console.log(gray("┌──────────────────────────────────────────────────┐"));
+  console.log(gray("│       "+logo1(" _____     _      ")+logo2(" _____         _   ")+"      │"));
+  console.log(gray("│       "+logo1("|  _  |___| |_ ___")+logo2("|     |___ ___| |_ ")+"      │"));
+  console.log(gray("│       "+logo1("|   __| . | '_| -_")+logo2("| | | | .'|  _|  _|")+"      │"));
+  console.log(gray("│       "+logo1("|__|  |___|_,_|___")+logo2("|_|_|_|__,|_| |_|  ")+"      │"));
+
+
+  // create table
+  var table = new Table({
+      head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
+      colWidths: [4, 15, 15, 7, 5],
+      // chars: {'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': ''}
+      chars: { 'top-left': '├' , 'top-right': '┤'}
+  });
+   
+  connection.query("SELECT * FROM products", function(err, res) {
+    for (var i = 0; i < res.length; i++) {
+
+      var item_id = res[i].item_id;
+      var product = res[i].product_name;
+      var department = res[i].department_name;
+      var price = res[i].price; 
+      var qty = res[i].stock_quantity;
+
+      table.push([item_id, color(department, product), color(department, department), price, qty]);
+
+      // storeItem = {
+      //   "name":color(department, product),
+      //   "value":item_id
+      // }
+      // items.push(storeItem);
+    }
+
+    console.log(table.toString());
+
+    managerPrompt();
+  });
+
+
+
+}
+
