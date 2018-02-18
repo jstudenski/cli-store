@@ -18,19 +18,27 @@ connection.connect(function(err) {
 
 });
 
-
-
-// var totalStyle = clc.xterm(46) // .bgXterm(236); // 
-// console.log(totalStyle('Orange text on dark gray background'));
-
 var items = [];
 
 var displayItems = function() {
+
+  var gray = clc.xterm(8);
+  var logo1 = clc.xterm(226);
+  var logo2 = clc.xterm(27);
+  console.log(gray("┌──────────────────────────────────────────────────┐"));
+  console.log(gray("│       "+logo1(" _____     _      ")+logo2(" _____         _   ")+"      │"));
+  console.log(gray("│       "+logo1("|  _  |___| |_ ___")+logo2("|     |___ ___| |_ ")+"      │"));
+  console.log(gray("│       "+logo1("|   __| . | '_| -_")+logo2("| | | | .'|  _|  _|")+"      │"));
+  console.log(gray("│       "+logo1("|__|  |___|_,_|___")+logo2("|_|_|_|__,|_| |_|  ")+"      │"));
+
+
   //clear();
   // create table
   var table = new Table({
       head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
-      colWidths: [4, 15, 15, 7, 5]
+      colWidths: [4, 15, 15, 7, 5],
+      // chars: {'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': ''}
+      chars: { 'top-left': '├' , 'top-right': '┤'}
   });
    
   connection.query("SELECT * FROM products", function(err, res) {
