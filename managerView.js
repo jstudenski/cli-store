@@ -3,6 +3,14 @@ var inquirer = require("inquirer");
 var Table = require('cli-table');
 var clc = require('cli-color');
 var clear = require('clear');
+var header = require('./tableHeaders.js');
+
+
+var tableOptions = {
+  head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
+  colWidths: [4, 15, 15, 7, 5],
+  chars: {'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': '', 'top-left': '├' , 'top-right': '┤'}
+}
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -63,11 +71,9 @@ function viewProducts(){
 
 function lowInventory(){
   clear();
-  //console.log("2");
-  var table = new Table({
-    head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
-    colWidths: [4, 15, 15, 7, 5],
-  });
+  header('low');
+
+  var table = new Table(tableOptions);
 
   connection.query("SELECT * FROM products WHERE stock_quantity < 5;", function(err, res) {
     for (var i = 0; i < res.length; i++) {
@@ -172,7 +178,7 @@ function color(department, text) {
     case 'Potions':
       msg = clc.xterm(133);
       break;
-    case 'Item':
+    case 'Items':
       msg = clc.xterm(40);
       break; 
     case 'Medicine':
@@ -190,24 +196,8 @@ function color(department, text) {
 
 var displayItems = function() {
   clear();
-
-  var gray = clc.xterm(8);
-  var logo1 = clc.xterm(226);
-  var logo2 = clc.xterm(27);
-  console.log(gray("┌──────────────────────────────────────────────────┐"));
-  console.log(gray("│       "+logo1(" _____     _      ")+logo2(" _____         _   ")+"      │"));
-  console.log(gray("│       "+logo1("|  _  |___| |_ ___")+logo2("|     |___ ___| |_ ")+"      │"));
-  console.log(gray("│       "+logo1("|   __| . | '_| -_")+logo2("| | | | .'|  _|  _|")+"      │"));
-  console.log(gray("│       "+logo1("|__|  |___|_,_|___")+logo2("|_|_|_|__,|_| |_|  ")+"      │"));
-
-
-  // create table
-  var table = new Table({
-      head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
-      colWidths: [4, 15, 15, 7, 5],
-      // chars: {'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': ''}
-      chars: { 'top-left': '├' , 'top-right': '┤'}
-  });
+  header('items');
+  var table = new Table(tableOptions);
    
   connection.query("SELECT * FROM products", function(err, res) {
     for (var i = 0; i < res.length; i++) {

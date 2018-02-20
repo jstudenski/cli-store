@@ -74,7 +74,7 @@ function color(department, text) {
     case 'Potions':
       msg = clc.xterm(133);
       break;
-    case 'Item':
+    case 'Items':
       msg = clc.xterm(40);
       break; 
     case 'Medicine':
