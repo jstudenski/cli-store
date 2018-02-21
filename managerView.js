@@ -72,7 +72,6 @@ function viewProducts(){
 function lowInventory(){
   clear();
   header('low');
-
   var table = new Table(tableOptions);
 
   connection.query("SELECT * FROM products WHERE stock_quantity < 5;", function(err, res) {
@@ -99,11 +98,54 @@ function lowInventory(){
 }
 
 
-
+var items = [];
 function addInventory(){
-  console.log("3");
+  clear();
+  header('add');
+  var table = new Table(tableOptions);
+   
+  connection.query("SELECT * FROM products", function(err, res) {
+    for (var i = 0; i < res.length; i++) {
+
+      var item_id = res[i].item_id;
+      var product = res[i].product_name;
+      var department = res[i].department_name;
+      var price = res[i].price; 
+      var qty = res[i].stock_quantity;
+
+      table.push([item_id, color(department, product), color(department, department), price, qty]);
+
+      storeItem = {
+        "name":color(department, product),
+        "value":item_id
+      }
+      items.push(storeItem);
+    }
+
+    console.log(table.toString());
+    //call;
+    //resolve();
+    addInventoryPrompt();
+  });
 
 }  
+
+function addInventoryPrompt() {
+  inquirer.prompt([{
+    type: "list",
+    name: "id",
+    message: "What item would you like to add stock to?",
+    choices: items,
+  },{      
+    type: "text",
+    name: "qty",
+    message: "Quantity?"
+  }])
+  .then(function(resp) {
+    console.log(resp.id + " " + resp.qty);
+  });
+}
+
 
 function removeProduct(){
   inquirer.prompt([

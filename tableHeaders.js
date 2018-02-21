@@ -14,6 +14,9 @@ module.exports = function(type) {
     case 'items':
         console.log(gray("│                   "+logo1("CURRENT STOCK")+"                  │"));
         break;
+    case 'add':
+        console.log(gray("│                 "+logo1("ADD TO INVENTORY")+"                 │"));
+        break;
     // case n:
     //     code block
     //     break;
