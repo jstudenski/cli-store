@@ -30,7 +30,7 @@ function managerPrompt() {
       type: "list",
       message: "Manager Options:",
       choices: [
-        "View Products for Sale",
+        "View All Products",
         "View Low Inventory",
         "Add to Inventory",
         "Add New Product",
@@ -40,7 +40,7 @@ function managerPrompt() {
     }
   ]).then(function(res) {
     switch(res.choice) {
-      case "View Products for Sale":
+      case "View All Products":
         viewProducts();
         break;
       case "View Low Inventory":
@@ -253,34 +253,40 @@ function color(department, text) {
 }
 
 var displayItems = function() {
-  clear();
-  header('items');
-  var table = new Table(tableOptions);
-   
+
   connection.query("SELECT * FROM products", function(err, res) {
-    for (var i = 0; i < res.length; i++) {
-
-      var item_id = res[i].item_id;
-      var product = res[i].product_name;
-      var department = res[i].department_name;
-      var price = res[i].price; 
-      var qty = res[i].stock_quantity;
-
-      table.push([item_id, color(department, product), color(department, department), price, qty]);
-
-      // storeItem = {
-      //   "name":color(department, product),
-      //   "value":item_id
-      // }
-      // items.push(storeItem);
-    }
-
-    console.log(table.toString());
+    
+    console.log(generateTable(res));
 
     managerPrompt();
   });
 
-
-
 }
 
+
+function generateTable(res) {
+
+  clear();
+  header('items');
+
+  var table = new Table(tableOptions);
+
+  for (var i = 0; i < res.length; i++) {
+
+    var item_id = res[i].item_id;
+    var product = res[i].product_name;
+    var department = res[i].department_name;
+    var price = res[i].price; 
+    var qty = res[i].stock_quantity;
+
+    table.push([item_id, color(department, product), color(department, department), price, qty]);
+
+    // storeItem = {
+    //   "name":color(department, product),
+    //   "value":item_id
+    // }
+    // items.push(storeItem);
+  }
+  return table.toString()
+
+}
