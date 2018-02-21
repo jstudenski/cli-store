@@ -5,6 +5,7 @@ var clc = require('cli-color');
 var clear = require('clear');
 var header = require('./tableHeaders.js');
 
+var items = [];
 
 var tableOptions = {
   head: ['ID', 'Item', 'Department', 'Price', 'QTY'], 
@@ -98,7 +99,7 @@ function lowInventory(){
 }
 
 
-var items = [];
+
 function addInventory(){
   clear();
   header('add');
@@ -152,7 +153,9 @@ function addInventoryPrompt() {
 
       // Call deleteProduct AFTER the UPDATE completes
       //deleteProduct();
-      managerPrompt();
+
+      viewProducts();
+      //managerPrompt();
     }
   );
 
@@ -256,7 +259,7 @@ var displayItems = function() {
 
   connection.query("SELECT * FROM products", function(err, res) {
     
-    console.log(generateTable(res));
+    console.log(generateTable(res).table);
 
     managerPrompt();
   });
@@ -265,7 +268,8 @@ var displayItems = function() {
 
 
 function generateTable(res) {
-
+  // empty items array
+  items = [];
   clear();
   header('items');
 
@@ -281,12 +285,18 @@ function generateTable(res) {
 
     table.push([item_id, color(department, product), color(department, department), price, qty]);
 
-    // storeItem = {
-    //   "name":color(department, product),
-    //   "value":item_id
-    // }
-    // items.push(storeItem);
+    storeItem = {
+      "name":color(department, product),
+      "value":item_id
+    }
+    items.push(storeItem);
   }
-  return table.toString()
+
+  temp = {
+    "table": table.toString(),
+    "items": items
+  }
+
+  return temp;
 
 }
