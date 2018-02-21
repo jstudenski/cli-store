@@ -143,6 +143,22 @@ function addInventoryPrompt() {
   }])
   .then(function(resp) {
     console.log(resp.id + " " + resp.qty);
+
+    var query = connection.query(
+    "UPDATE products SET stock_quantity = (stock_quantity + ?) WHERE item_id = ?", [resp.qty, resp.id],
+    function(err, res) {
+      if(err) console.log(err);
+      console.log(res.affectedRows + " product updated!\n");
+
+      // Call deleteProduct AFTER the UPDATE completes
+      //deleteProduct();
+      managerPrompt();
+    }
+  );
+
+
+
+
   });
 }
 
