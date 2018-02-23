@@ -75,65 +75,25 @@ function lowInventory(){
   var table = new Table(tableOptions);
 
   connection.query("SELECT * FROM products WHERE stock_quantity < 5;", function(err, res) {
-    // for (var i = 0; i < res.length; i++) {
-    //   var item_id = res[i].item_id;
-    //   var product = res[i].product_name;
-    //   var department = res[i].department_name;
-    //   var price = res[i].price; 
-    //   var qty = res[i].stock_quantity;
 
-    //   table.push([item_id, color(department, product), color(department, department), price, qty]);
-
-
-      console.log(generateTable(res, 'Low Inventory').table);
-
-    // storeItem = {
-    //   "name":color(department, product),
-    //   "value":item_id
-    // }
-    // items.push(storeItem);
-
- // }
-
-  //  console.log(table.toString()); 
+    console.log(generateTable(res, 'Low Inventory').table);
     managerPrompt();
+
   });
 }
 
 
 
 function addInventory(){
-  clear();
-  header('add');
+  // clear();
+  // header('add');
   var table = new Table(tableOptions);
    
   connection.query("SELECT * FROM products", function(err, res) {
 
-    console.log(generateTable(res).table);
-
-    // for (var i = 0; i < res.length; i++) {
-
-    //   var item_id = res[i].item_id;
-    //   var product = res[i].product_name;
-    //   var department = res[i].department_name;
-    //   var price = res[i].price; 
-    //   var qty = res[i].stock_quantity;
-
-    //   table.push([item_id, color(department, product), color(department, department), price, qty]);
-
-    //   storeItem = {
-    //     "name":color(department, product),
-    //     "value":item_id
-    //   }
-    //   items.push(storeItem);
-    // }
-
-    // console.log(table.toString());
-
-
-    //call;
-    //resolve();
+    console.log(generateTable(res, 'Add Inventory').table);
     addInventoryPrompt();
+
   });
 
 }  
@@ -266,9 +226,9 @@ var displayItems = function() {
 
   connection.query("SELECT * FROM products", function(err, res) {
     
-    console.log(generateTable(res).table);
-
+    console.log(generateTable(res, "Inventory").table);
     managerPrompt();
+    
   });
 
 }
