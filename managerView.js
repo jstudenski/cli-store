@@ -106,24 +106,29 @@ function addInventory(){
   var table = new Table(tableOptions);
    
   connection.query("SELECT * FROM products", function(err, res) {
-    for (var i = 0; i < res.length; i++) {
 
-      var item_id = res[i].item_id;
-      var product = res[i].product_name;
-      var department = res[i].department_name;
-      var price = res[i].price; 
-      var qty = res[i].stock_quantity;
+    console.log(generateTable(res).table);
 
-      table.push([item_id, color(department, product), color(department, department), price, qty]);
+    // for (var i = 0; i < res.length; i++) {
 
-      storeItem = {
-        "name":color(department, product),
-        "value":item_id
-      }
-      items.push(storeItem);
-    }
+    //   var item_id = res[i].item_id;
+    //   var product = res[i].product_name;
+    //   var department = res[i].department_name;
+    //   var price = res[i].price; 
+    //   var qty = res[i].stock_quantity;
 
-    console.log(table.toString());
+    //   table.push([item_id, color(department, product), color(department, department), price, qty]);
+
+    //   storeItem = {
+    //     "name":color(department, product),
+    //     "value":item_id
+    //   }
+    //   items.push(storeItem);
+    // }
+
+    // console.log(table.toString());
+
+    
     //call;
     //resolve();
     addInventoryPrompt();
