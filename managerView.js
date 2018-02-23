@@ -71,19 +71,21 @@ function viewProducts(){
 }
 
 function lowInventory(){
-  clear();
-  header('low');
+
   var table = new Table(tableOptions);
 
   connection.query("SELECT * FROM products WHERE stock_quantity < 5;", function(err, res) {
-    for (var i = 0; i < res.length; i++) {
-      var item_id = res[i].item_id;
-      var product = res[i].product_name;
-      var department = res[i].department_name;
-      var price = res[i].price; 
-      var qty = res[i].stock_quantity;
+    // for (var i = 0; i < res.length; i++) {
+    //   var item_id = res[i].item_id;
+    //   var product = res[i].product_name;
+    //   var department = res[i].department_name;
+    //   var price = res[i].price; 
+    //   var qty = res[i].stock_quantity;
 
-      table.push([item_id, color(department, product), color(department, department), price, qty]);
+    //   table.push([item_id, color(department, product), color(department, department), price, qty]);
+
+
+      console.log(generateTable(res, 'Low Inventory').table);
 
     // storeItem = {
     //   "name":color(department, product),
@@ -91,9 +93,9 @@ function lowInventory(){
     // }
     // items.push(storeItem);
 
-  }
+ // }
 
-    console.log(table.toString()); 
+  //  console.log(table.toString()); 
     managerPrompt();
   });
 }
@@ -128,7 +130,7 @@ function addInventory(){
 
     // console.log(table.toString());
 
-    
+
     //call;
     //resolve();
     addInventoryPrompt();
@@ -272,11 +274,11 @@ var displayItems = function() {
 }
 
 
-function generateTable(res) {
+function generateTable(res, title) {
   // empty items array
   items = [];
   clear();
-  header('items');
+  header(title);
 
   var table = new Table(tableOptions);
 
