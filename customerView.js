@@ -114,8 +114,6 @@ function checkStock(id, qty) {
         console.log("You want "+qty+" "+res[0].product_name+" when only "+res[0].stock_quantity+" are avaliable!");
       } else {
 
-        //console.log("Desired Quantity "+qty);
-        //console.log("Avaliable Quantity "+res[0].stock_quantity);
         updateStock(id, res[0].stock_quantity-qty);
 
         var receipt = new Table({
@@ -125,12 +123,6 @@ function checkStock(id, qty) {
         receipt.push([res[0].product_name, res[0].price, qty, res[0].price*qty]);
         console.log(receipt.toString());
 
-        // console.log("Purchase Made!");
-        // console.log("Item Cost: "+)
-        // console.log("Quantity: "+)
-        // console.log("Total Cost: "+());
-
-        //displayCost(id, qty);
       }
 
     //connection.end();

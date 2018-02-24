@@ -59,10 +59,7 @@ function managerPrompt() {
         break;
       default:
         console.log("Option Not Defined");
-  }
-
-
-
+    }
   });
 } 
 
@@ -72,31 +69,18 @@ function viewProducts(){
 }
 
 function lowInventory(){
-
-  var table = new Table(tableOptions);
-
   connection.query("SELECT * FROM products WHERE stock_quantity < 5;", function(err, res) {
-
     console.log(generateTable(res, 'Low Inventory').table);
     managerPrompt();
-
   });
 }
 
 
-
-function addInventory(){
-  // clear();
-  // header('add');
-  var table = new Table(tableOptions);
-   
+function addInventory(){   
   connection.query("SELECT * FROM products", function(err, res) {
-
     console.log(generateTable(res, 'Add Inventory').table);
     addInventoryPrompt();
-
   });
-
 }  
 
 function addInventoryPrompt() {
@@ -112,28 +96,16 @@ function addInventoryPrompt() {
   }])
   .then(function(resp) {
     console.log(resp.id + " " + resp.qty);
-
     var query = connection.query(
-    "UPDATE products SET stock_quantity = (stock_quantity + ?) WHERE item_id = ?", [resp.qty, resp.id],
-    function(err, res) {
-      if(err) console.log(err);
-      console.log(res.affectedRows + " product updated!\n");
-
-      // Call deleteProduct AFTER the UPDATE completes
-      //deleteProduct();
-
-      displayItems();
-      //viewProducts();
-
-      //managerPrompt();
-    }
-  );
-
-
+      "UPDATE products SET stock_quantity = (stock_quantity + ?) WHERE item_id = ?", [resp.qty, resp.id],
+      function(err, res) {
+        if(err) console.log(err);
+        console.log(res.affectedRows + " product updated!\n");
+        displayItems();
+      }
+    );
   });
 }
-
-
 
 
 function removeProduct(){
@@ -146,7 +118,7 @@ function removeProduct(){
       choices: items
     }
   ]).then(function(res) {
-  
+
     connection.query(
       "DELETE FROM products WHERE ?",
       {
@@ -154,8 +126,6 @@ function removeProduct(){
       },
       function(err, res) {
         console.log(res.affectedRows + " products deleted!\n");
-        // Call readProducts AFTER the DELETE completes
-        //managerPrompt();
         displayItems();
       }
     );
@@ -192,23 +162,15 @@ function newProduct(){
       name: "qty"
     }
   ]).then(function(res) {
-
     connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('"+res.name+"', '"+res.dept+"', '"+res.price+"', '"+res.qty+"')", function(err, res) {
-      // managerPrompt();
-
       displayItems();
-
-
-      //console.log(res.affectedRows + " product added!\n");
     }); 
-
   });
-
 }
 
 
 function color(department, text) {
-  var msg;//  = clc.xterm(202).bgXterm(236);
+  var msg;
   switch(department) {
     case 'Pokeballs':
       msg = clc.xterm(32);
@@ -233,14 +195,10 @@ function color(department, text) {
 }
 
 var displayItems = function() {
-
   connection.query("SELECT * FROM products", function(err, res) {
-    
     console.log(generateTable(res, "Inventory").table);
     managerPrompt();
-
   });
-
 }
 
 
