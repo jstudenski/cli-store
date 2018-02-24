@@ -22,7 +22,8 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  managerPrompt();
+  viewProducts();
+
 });
 
 function managerPrompt() {
@@ -121,24 +122,28 @@ function addInventoryPrompt() {
       // Call deleteProduct AFTER the UPDATE completes
       //deleteProduct();
 
-      viewProducts();
+      displayItems();
+      //viewProducts();
+
       //managerPrompt();
     }
   );
-
-
 
 
   });
 }
 
 
+
+
 function removeProduct(){
+
   inquirer.prompt([
       {
-      type: "text",
-      message: "Remove item number:",
-      name: "item"
+      type: "list",
+      message: "Pick an item to remove:",
+      name: "item",
+      choices: items
     }
   ]).then(function(res) {
   
@@ -150,7 +155,8 @@ function removeProduct(){
       function(err, res) {
         console.log(res.affectedRows + " products deleted!\n");
         // Call readProducts AFTER the DELETE completes
-        managerPrompt();
+        //managerPrompt();
+        displayItems();
       }
     );
   });
@@ -188,7 +194,11 @@ function newProduct(){
   ]).then(function(res) {
 
     connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('"+res.name+"', '"+res.dept+"', '"+res.price+"', '"+res.qty+"')", function(err, res) {
-      managerPrompt();
+      // managerPrompt();
+
+      displayItems();
+
+
       //console.log(res.affectedRows + " product added!\n");
     }); 
 
@@ -228,7 +238,7 @@ var displayItems = function() {
     
     console.log(generateTable(res, "Inventory").table);
     managerPrompt();
-    
+
   });
 
 }
